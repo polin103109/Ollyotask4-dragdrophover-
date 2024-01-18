@@ -138,8 +138,8 @@ const CreateDiv = () => {
           left: "45%",
         }}
       >
-        <label style={{ marginRight: "10px" }}>Direction: </label>
-        <select
+        <label style={{ marginRight: "10px",height:"20px",fontSize:"20px"}}>Direction: </label>
+        <select style={{height:"30px",fontSize:"20px"}}
           value={direction}
           onChange={(e) => {
             setDirection(e.target.value);
