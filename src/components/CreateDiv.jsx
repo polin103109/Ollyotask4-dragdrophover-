@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Tooltip from "./Tooltip/ToolTip";
+import { Camera } from 'lucide-react';  
+
 const CreateDiv = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [absolutePosition, setAbsolutePosition] = useState({
@@ -164,8 +166,8 @@ const CreateDiv = () => {
         <div
           id="container"
           style={{
-            width: "400px",
-            height: "400px",
+            width: "500px",
+            height: "500px",
             position: "relative",
             backgroundColor: "pink",
             top: `${containerPosition.y}px`,
@@ -186,7 +188,8 @@ const CreateDiv = () => {
             }}
             onMouseDown={handleContainerMouseDown}
           >
-            icon
+             <Camera size="32" color="black" />
+            
           </div>
           <div
             id="dragbox"
