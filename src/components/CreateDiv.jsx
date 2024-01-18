@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Tooltip from "./Tooltip/ToolTip";
-
 const CreateDiv = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [absolutePosition, setAbsolutePosition] = useState({
@@ -8,13 +7,21 @@ const CreateDiv = () => {
     x: 0,
     y: 0,
   });
+  const [containerPosition, setContainerPosition] = useState({
+    x: 610,
+    y: 150,
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [direction, setDirection] = useState("top");
 
   const handleMouseOver = () => {
-    const parentRect = document.getElementById("container")?.getBoundingClientRect();
-    const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
+    const parentRect = document
+      .getElementById("container")
+      ?.getBoundingClientRect();
+    const dragboxRect = document
+      .getElementById("dragbox")
+      ?.getBoundingClientRect();
     setAbsolutePosition({
       parentbox: { x: parentRect?.x || 0, y: parentRect?.y || 0 },
       y: dragboxRect?.y || 0,
@@ -37,8 +44,12 @@ const CreateDiv = () => {
     };
     setIsDragging(true);
 
-    const parentRect = document.getElementById("container")?.getBoundingClientRect();
-    const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
+    const parentRect = document
+      .getElementById("container")
+      ?.getBoundingClientRect();
+    const dragboxRect = document
+      .getElementById("dragbox")
+      ?.getBoundingClientRect();
     setAbsolutePosition({
       parentbox: { x: parentRect?.x || 0, y: parentRect?.y || 0 },
       y: dragboxRect?.y || 0,
@@ -53,9 +64,13 @@ const CreateDiv = () => {
     const newX = e.clientX - (startPosition.x === 0 ? e.clientX : startPosition.x);
     const newY = e.clientY - (startPosition.y === 0 ? e.clientY : startPosition.y);
 
-    const parentRect = document.getElementById("container")?.getBoundingClientRect();
+    const parentRect = document
+      .getElementById("container")
+      ?.getBoundingClientRect();
 
-    const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
+    const dragboxRect = document
+      .getElementById("dragbox")
+      ?.getBoundingClientRect();
 
     const maxX = parentRect?.width && parentRect.width - 100;
     const maxY = parentRect?.height && parentRect.height - 100;
@@ -77,65 +92,131 @@ const CreateDiv = () => {
     document.removeEventListener("mouseup", handleMouseUp);
   };
 
-  const tooltipContent = "Hey There!";
+  const tooltipContent = "Heyy I am poppingg";
+
+  let startContainerPosition = { x: 610, y: 150 };
+  const handleContainerMouseDown = (e) => {
+    startContainerPosition = {
+      x: e.clientX - containerPosition.x,
+      y: e.clientY - containerPosition.y,
+    };
+
+    document.addEventListener("mousemove", handleContainerMouseMove);
+    document.addEventListener("mouseup", handleContainerMouseUp);
+  };
+
+  const handleContainerMouseMove = (e) => {
+    const newX = e.clientX - (startContainerPosition.x === 0 ? e.clientX : startContainerPosition.x);
+    const newY = e.clientY - (startContainerPosition.y === 0 ? e.clientY : startContainerPosition.y);
+
+    const parentRect = document
+      .getElementById("main-container")
+      ?.getBoundingClientRect();
+
+    const maxX = parentRect?.width && parentRect.width - 400;
+    const maxY = parentRect?.height && parentRect.height - 400;
+
+    const boundedX = Math.min(Math.max(newX, 0), maxX ? maxX : 0);
+    const boundedY = Math.min(Math.max(newY, 0), maxY ? maxY : 0);
+
+    setContainerPosition({ x: boundedX, y: boundedY });
+  };
+
+  const handleContainerMouseUp = () => {
+    document.removeEventListener("mousemove", handleContainerMouseMove);
+    document.removeEventListener("mouseup", handleContainerMouseUp);
+  };
 
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-   
-
+    <div style={{ width: "100vw", height: "100vh" }}>
       <div
-        id="container"
         style={{
-          width: "600px",
-          height: "600px",
-          position: "relative",
-          border: "1px solid black",  
-          borderRadius: "10px",  
-          backgroundColor: "pink",
-          boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",  
-         
+          marginBottom: 70,
+          marginTop: 60,
+          position: "fixed",
+          top: 10,
+          left: "45%",
         }}
       >
+        <label style={{ marginRight: "10px" }}>Direction: </label>
+        <select
+          value={direction}
+          onChange={(e) => {
+            setDirection(e.target.value);
+          }}
+        >
+          <option value={""} disabled>
+            Direction
+          </option>
+          <option value={"top"}>Top</option>
+          <option value={"left"}>Left</option>
+          <option value={"right"}>Right</option>
+          <option value={"bottom"}>Bottom</option>
+        </select>
+      </div>
       <div
-  id="dragbox"
-  style={{
-    width: "100px",
-    height: "100px",
-    backgroundColor: "purple",
-    position: "absolute",
-    top: `${position.y}px`,
-    left: `${position.x}px`,
-    cursor: "move",
-    border: "2px solid #fff",  
-    borderRadius: "10px",  
-    boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",  
-    color: "#fff",  
-    textAlign: "center",  
-    lineHeight: "100px",  
-  }}
-          onMouseDown={handleMouseDown}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-         >Drag ME!!!!</div>
-        {!isDragging && isHovered && (
-          <Tooltip
-            position={absolutePosition}
-            direction={direction}
-            content={tooltipContent}
-          />
-        )}
+        id="main-container"
+        style={{
+          alignItems: "center",
+          height: "99.5vh",
+        }}
+      >
+        <div
+          id="container"
+          style={{
+            width: "400px",
+            height: "400px",
+            position: "relative",
+            backgroundColor: "pink",
+            top: `${containerPosition.y}px`,
+            left: `${containerPosition.x}px`,
+            border: "1px solid #ccc",
+          }}
+        >
+          <div
+            style={{
+              position: "relative",
+              top: 0,
+              left: "calc(100% - 31px)",
+              width: 30,
+              height: 30,
+              border: "1px solid black",
+              textAlign: "center",
+              cursor: "grab",
+            }}
+            onMouseDown={handleContainerMouseDown}
+          >
+            icon
+          </div>
+          <div
+            id="dragbox"
+            style={{
+              width: "100px",
+              height: "100px",
+              backgroundColor: "purple",
+              position: "absolute",
+              top: `${position.y}px`,
+              left: `${position.x}px`,
+              cursor: "move",
+              display:"flex",
+              alignItems:"center",
+              justifyContent:"center",
+              color:"#fff",
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
+          > Drag me!</div>
+          {!isDragging && isHovered && (
+            <Tooltip
+              position={absolutePosition}
+              direction={direction}
+              content={tooltipContent}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
 };
-
-export default CreateDiv;
+export default CreateDiv
