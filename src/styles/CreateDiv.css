@@ -1,0 +1,35 @@
+.wholedivwrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+   
+}
+
+
+
+.droppablemaindiv{
+   width:500px;
+   height: 500px;
+   background-color: aqua;
+   user-select: none;
+   position: relative;
+}
+
+.innerdiv{
+    width:100px;
+    background-color: beige;
+    height: 100px;
+    position: absolute;
+    cursor: pointer;
+
+}
+.item{
+    width:100px;
+    height: 100px;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
