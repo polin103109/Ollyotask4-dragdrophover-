@@ -1,35 +1,49 @@
-.wholedivwrapper{
+.main-div{
     display: flex;
     justify-content: center;
     align-items: center;
-   
-   
+    max-width: 100dvw;
+    max-height: 100dvh;
+    min-height: 100dvh;
+    min-width: 100dvw;
+    position: relative;
 }
+    .dragging-div {
+        min-height: 70dvh;
+        min-width: 70dvw;
+        border: 2px solid #888;
+        overflow: hidden;
+        position: relative;
+        
+    }
+        .dragging {
+            border: 2px solid #d6aee2;
+        }
 
+        .drag-div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 5rem;
+            height: 5rem;
+            border: 2px solid #888;
+            font-weight: bold;
 
+        }
 
-.droppablemaindiv{
-   width:500px;
-   height: 500px;
-   background-color: aqua;
-   user-select: none;
-   position: relative;
-}
+            .drag-div:hover {
+                border: 2px solid #d6aee2;
+               
+            }
 
-.innerdiv{
-    width:100px;
-    background-color: beige;
-    height: 100px;
-    position: absolute;
-    cursor: pointer;
-
-}
-.item{
-    width:100px;
-    height: 100px;
-    background-color: black;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+            .dragging {
+                border: 2px solid #d6aee2;
+            }
+            .tooltip{
+                margin-top: 20px;
+                height: 20px;
+                width:200px;
+                background-color: aqua;
+            }
+        
+    

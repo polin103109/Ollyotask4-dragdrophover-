@@ -1,70 +1,78 @@
-import React, { useEffect, useState } from 'react';
-import "../styles/CreateDiv.css"
+import React, { useState } from "react";
+import "../styles/CreateDiv.css";
+import Tooltip from "./Tooltip/ToolTip";
 
-const CreateDiv = () => {
+function CreateDiv() {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   const [isDragging, setIsDragging] = useState(false);
-  const [offsetX, setOffsetX] = useState(0);
-  const [offsetY, setOffsetY] = useState(0);
+  const tooltipDivSize = {
+    width: 0,
+    height: 0,
+  };
+  const startPosition = { x: 0, y: 0 };
 
-  const startDrag = (event) => {
-    console.log("drag start")
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    tooltipDivSize.width = e.currentTarget.getBoundingClientRect().width;
+    tooltipDivSize.height = e.currentTarget.getBoundingClientRect().height;
+
     setIsDragging(true);
-     setOffsetX(event.clientX - event.target.getBoundingClientRect().left);
-    setOffsetY(event.clientY - event.target.getBoundingClientRect().top);
 
-    document.addEventListener("mousemove", drag);
-    document.addEventListener("mouseup", stopDrag);
+    startPosition.x = e.clientX - position.x;
+    startPosition.y = e.clientY - position.y;
+
+    document.body.addEventListener("mousemove", handleMouseMove);
+    document.body.addEventListener("mouseup", handleMouseUp);
   };
 
-  const drag = (event) => {
-    console.log({isDragging})
-    if (isDragging) {
-       const newX = event.clientX - offsetX;
-      const newY = event.clientY - offsetY;
+  const handleMouseMove = (e) => {
+    const newX = e.clientX - startPosition.x;
+    const newY = e.clientY - startPosition.y;
 
-      
-      const container = document.getElementById("container");
-      const maxX = container.clientWidth - document.getElementById("draggable").offsetWidth;
-      const maxY = container.clientHeight - document.getElementById("draggable").offsetHeight;
+    const parentRect = document.getElementById("dragging-div")?.getBoundingClientRect();
+    const maxX = parentRect && parentRect.width - tooltipDivSize.width - 4;
+    const maxY = parentRect && parentRect.height - tooltipDivSize.height - 4;
 
-      const clampedX = Math.min(Math.max(newX, 0), maxX);
-      const clampedY = Math.min(Math.max(newY, 0), maxY);
+    const boundedX = Math.min(Math.max(newX, 0), maxX ? maxX : 0);
+    const boundedY = Math.min(Math.max(newY, 0), maxY ? maxY : 0);
 
-      document.getElementById("draggable").style.left = clampedX + "px";
-      document.getElementById("draggable").style.top = clampedY + "px";
-    }
+    setPosition({ x: boundedX, y: boundedY });
   };
 
-  const stopDrag = () => {
+  const handleMouseUp = () => {
     setIsDragging(false);
-    document.removeEventListener("mousemove", drag);
-    document.removeEventListener("mouseup", stopDrag);
+    document.body.removeEventListener("mousemove", handleMouseMove);
+    document.body.removeEventListener("mouseup", handleMouseUp);
   };
 
-  useEffect(() => {
-    window.addEventListener("mousedown", startDrag);
-    window.addEventListener("mousemove", drag)
-    
-
-   return () =>{
-    window.removeEventListener("load",startDrag);
-   }
-  }, [])
+  
 
   return (
-    <div id="container" style={{ position: 'relative', width: '500px', height: '500px', border: '1px solid #000', margin:'100px' }}>
-      <div
-        id="draggable"
-        style={{
-          position: 'absolute',
-          width: '100px',
-          height: '100px',
-          backgroundColor: '#3498db',
-          cursor: 'pointer',
-        }}
-      ></div>
+    <div className="main-div">
+      <div className={`dragging-div ${isDragging ? "dragging" : ""}`} id="dragging-div">
+        <div
+          className={`drag-div ${isDragging ? "dragging" : ""}`}
+          style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+          onMouseDown={handleMouseDown}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          Hellllooooo
+        </div>
+        {isHovered && <Tooltip />}
+      </div>
     </div>
   );
-};
+}
 
 export default CreateDiv;
