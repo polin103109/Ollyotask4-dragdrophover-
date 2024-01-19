@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState,useRef, useEffect} from "react";
 import Tooltip from "./Tooltip/ToolTip";
 import { Camera } from 'lucide-react';  
 
 const CreateDiv = () => {
+  const refContainer = useRef(null);
+  const refTop = useRef(null);
+  const refRight = useRef(null);
+  const refBottom = useRef(null);
+  const refLeft = useRef(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [absolutePosition, setAbsolutePosition] = useState({
     parentbox: { x: 0, y: 0 },
@@ -16,6 +21,119 @@ const CreateDiv = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [direction, setDirection] = useState("top");
+  useEffect(() => {
+    const resizeableElement = refContainer.current;
+    console.log(resizeableElement)
+    const styles = window.getComputedStyle(resizeableElement);
+    let width = parseInt(styles.width, 10);
+    let height = parseInt(styles.height, 10);
+    
+    let xCord = 0;
+    let yCord = 0;
+  
+    resizeableElement.style.top = "150px";
+    resizeableElement.style.left = "150px";
+  
+    //top
+    const onMouseMoveTopResize = (event) => {
+      const dy = event.clientY - yCord;
+      height = height - dy;
+      yCord = event.clientY;
+      resizeableElement.style.height = `${height}px`;
+      resizeableElement.style.top = `${parseInt(resizeableElement.style.top, 10) + dy}px`;
+    };
+  
+    const onMouseUpTopResize = () => {
+      document.removeEventListener("mousemove", onMouseMoveTopResize);
+   
+    };
+  
+    const onMouseDownTopResize = (event) => {
+      yCord = event.clientY;
+      const styles = window.getComputedStyle(resizeableElement);
+      resizeableElement.style.bottom = styles.bottom;
+      resizeableElement.style.top = null
+      document.addEventListener("mousemove", onMouseMoveTopResize);
+      document.addEventListener("mouseup", onMouseUpTopResize);
+    };
+  //Right
+  const onMouseMoveRightResize = (event) => {
+    const dx = event.clientX - xCord;
+    xCord = event.clientX;
+    width = width + dx;
+    resizeableElement.style.width = `${width}px`;
+  };
+
+  const onMouseUpRightResize = () => {
+    document.removeEventListener("mousemove", onMouseMoveRightResize);
+
+  };
+
+  const onMouseDownRightResize = (event) => {
+    xCord = event.clientX;
+    resizeableElement.style.left = styles.left;
+    resizeableElement.style.right = null
+    document.addEventListener("mousemove", onMouseMoveRightResize);
+    document.addEventListener("mouseup", onMouseUpRightResize);
+  }
+  //bottom
+  const onMouseMoveBottomResize = (event) => {
+    const dy = event.clientY - yCord;
+    height = height + dy;
+    yCord = event.clientY;
+    resizeableElement.style.height = `${height}px`;
+  };
+
+  const onMouseUpBottomResize = () => {
+    document.removeEventListener("mousemove", onMouseMoveBottomResize);
+  
+  };
+
+  const onMouseDownBottomResize = (event) => {
+    yCord = event.clientY;
+    const styles = window.getComputedStyle(resizeableElement);
+    resizeableElement.style.top = styles.top;
+    resizeableElement.style.bottom = null
+    document.addEventListener("mousemove", onMouseMoveBottomResize);
+    document.addEventListener("mouseup", onMouseUpBottomResize);
+  };
+  //left
+  const onMouseMoveLeftResize = (event) => {
+    const dx = event.clientX - xCord;
+    xCord = event.clientX;
+    width = width - dx;
+    resizeableElement.style.width = `${width}px`;
+  };
+
+  const onMouseUpLeftResize = () => {
+    document.removeEventListener("mousemove", onMouseMoveLeftResize);
+  //  document.removeEventListener("mouseup", onMouseUpTopResize);
+  };
+
+  const onMouseDownLeftResize = (event) => {
+    xCord = event.clientX;
+    resizeableElement.style.right = styles.right;
+    resizeableElement.style.left = null
+    document.addEventListener("mousemove", onMouseMoveLeftResize);
+    document.addEventListener("mouseup", onMouseUpLeftResize);
+  }
+  //mousedown event listener
+  const resizerRight = refRight.current;
+  resizerRight.addEventListener("mousedown",onMouseDownRightResize);
+  const resizerLeft = refLeft.current;
+  resizerLeft.addEventListener("mousedown",onMouseDownLeftResize);
+  const resizerTop = refTop.current;
+  resizerTop.addEventListener("mousedown",onMouseDownTopResize);
+  const resizerBottom = refBottom.current;
+  resizerBottom.addEventListener("mousedown",onMouseDownBottomResize);
+
+    return () => {
+      resizerRight.removeEventListener("mousedown",onMouseDownRightResize)
+      resizerLeft.removeEventListener("mousedown",onMouseDownLeftResize)
+      resizerTop.removeEventListener("mousedown",onMouseDownTopResize)
+      resizerBottom.removeEventListener("mousedown",onMouseDownBottomResize)
+    };
+  }, []);
 
   const handleMouseOver = () => {
     const parentRect = document
@@ -163,18 +281,60 @@ const CreateDiv = () => {
           height: "99.5vh",
         }}
       >
-        <div
-          id="container"
-          style={{
-            width: "500px",
-            height: "500px",
-            position: "relative",
-            backgroundColor: "pink",
-            top: `${containerPosition.y}px`,
-            left: `${containerPosition.x}px`,
-            border: "1px solid #ccc",
-          }}
-        >
+    
+<div
+  ref={refContainer}
+  id="container"
+  className="container"
+  style={{
+    width: "500px",
+    height: "500px",
+    position: "absolute",
+    backgroundColor: "pink",
+    top: `${containerPosition.y}px`,
+    left: `${containerPosition.x}px`,
+    border: "1px solid #ccc",
+    minWidth: "150px",  
+    minHeight: "150px", 
+  }}
+>
+            <div ref={refLeft} className="resize-rl"
+            style={{
+                cursor:"col-resize",
+                height:"100%",
+                left:0,
+                top:0,
+                width:"10px",
+                position: "absolute",
+              }}></div>
+            <div ref={refTop} className="resize-rt"
+             style={{
+                cursor:"row-resize",
+                height:"5px",
+                left:0,
+                top:0,
+                width:"100%",
+                position: "absolute",
+              }}></div>
+            <div ref={refRight} className="resize-rr"
+            style={{
+                cursor:"col-resize",
+                height:"100%",
+                right:0,
+                top:0,
+                width:"5px",
+                position: "absolute",
+              }}
+            ></div>
+            <div ref={refBottom} className="resize-rb"
+            style={{
+                cursor:"row-resize",
+                height:"5px",
+                left:0,
+                bottom:0,
+                width:"100%",
+                position: "absolute",
+              }}></div>
           <div
             style={{
               position: "relative",
