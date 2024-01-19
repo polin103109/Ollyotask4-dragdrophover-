@@ -1,6 +1,6 @@
 import { useState,useRef, useEffect} from "react";
-import Tooltip from "./Tooltip/ToolTip";
-import { Camera } from 'lucide-react';  
+import Tooltip from "./Tooltip/ToolTip";  
+import { AiOutlineDrag } from 'react-icons/ai';
 
 const CreateDiv = () => {
   const refContainer = useRef(null);
@@ -348,7 +348,8 @@ const CreateDiv = () => {
             }}
             onMouseDown={handleContainerMouseDown}
           >
-             <Camera size="32" color="black" />
+             <AiOutlineDrag size={32} color="black" curso r= 'grab'
+    margin='10px' />
             
           </div>
           <div
