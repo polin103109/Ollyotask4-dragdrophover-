@@ -41,6 +41,7 @@ const CreateDiv = () => {
       yCord = event.clientY;
       resizeableElement.style.height = `${height}px`;
       resizeableElement.style.top = `${parseInt(resizeableElement.style.top, 10) + dy}px`;
+      updatePurpleDivPosition();
     };
   
     const onMouseUpTopResize = () => {
@@ -62,6 +63,7 @@ const CreateDiv = () => {
     xCord = event.clientX;
     width = width + dx;
     resizeableElement.style.width = `${width}px`;
+    updatePurpleDivPosition();
   };
 
   const onMouseUpRightResize = () => {
@@ -82,6 +84,7 @@ const CreateDiv = () => {
     height = height + dy;
     yCord = event.clientY;
     resizeableElement.style.height = `${height}px`;
+    updatePurpleDivPosition();
   };
 
   const onMouseUpBottomResize = () => {
@@ -103,6 +106,7 @@ const CreateDiv = () => {
     xCord = event.clientX;
     width = width - dx;
     resizeableElement.style.width = `${width}px`;
+    updatePurpleDivPosition();
   };
 
   const onMouseUpLeftResize = () => {
@@ -134,6 +138,21 @@ const CreateDiv = () => {
       resizerBottom.removeEventListener("mousedown",onMouseDownBottomResize)
     };
   }, []);
+  const updatePurpleDivPosition = () => {
+    const parentRect = document
+      .getElementById("container")
+      ?.getBoundingClientRect();
+    const dragboxRect = document
+      .getElementById("dragbox")
+      ?.getBoundingClientRect();
+    
+    setAbsolutePosition({
+      parentbox: { x: parentRect?.x || 0, y: parentRect?.y || 0 },
+      y: dragboxRect?.y || 0,
+      x: dragboxRect?.x || 0,
+    });
+  };
+
 
   const handleMouseOver = () => {
     const parentRect = document
