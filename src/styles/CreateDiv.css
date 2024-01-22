@@ -1,49 +1,54 @@
-.main-div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 100dvw;
-    max-height: 100dvh;
-    min-height: 100dvh;
-    min-width: 100dvw;
-    position: relative;
+.resize-rl{
+    cursor: col-resize;
+              height: 100%;
+              left: 0;
+              top: 0;
+              width: 1px;
+              position: absolute;
+
 }
-    .dragging-div {
-        min-height: 70dvh;
-        min-width: 70dvw;
-        border: 2px solid #888;
-        overflow: hidden;
-        position: relative;
-        
-    }
-        .dragging {
-            border: 2px solid #d6aee2;
-        }
+.resize-rt{
 
-        .drag-div {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 5rem;
-            height: 5rem;
-            border: 2px solid #888;
-            font-weight: bold;
+              cursor: row-resize;
+              height: 1px;
+              left: 0;
+              top: 0;
+              width: 100%;
+              position: absolute;
 
-        }
+}
+.resize-rr{
+    cursor: col-resize;
+    height: 100%;
+    right: 0;
+    top: 0;
+    width: 1px;
+    position: absolute;
 
-            .drag-div:hover {
-                border: 2px solid #d6aee2;
-               
-            }
+}
+.resize-rb{
+    cursor: row-resize;
+    height: 1px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    position: absolute;
+  }
+  .maincontainer1{
+    width: 100vw;
+    height: 100vh;
+    background-color: aqua;
 
-            .dragging {
-                border: 2px solid #d6aee2;
-            }
-            .tooltip{
-                margin-top: 20px;
-                height: 20px;
-                width:200px;
-                background-color: aqua;
-            }
-        
+  }
+  .directioncontainer{
+    margin-bottom:70px;
+    margin-top:60px;
+    position: fixed;
+    top: 10px;
+    left: 45%;
     
+
+  }
+  
+
+
