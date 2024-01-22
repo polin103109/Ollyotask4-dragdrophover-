@@ -102,14 +102,14 @@ const CreateDiv = () => {
     //top
     const onMouseMoveTopResize = (event) => {
       const dy = event.clientY - yCord;
-      console.log(dy)
+     // console.log(dy)
       height = height - dy;
-      console.log(height)
+     // console.log(height)
       yCord = event.clientY;
       resizeableElement.style.height = `${height}px`;
-      resizeableElement.style.top = `${
-        parseInt(resizeableElement.style.top, 10) + dy
+      resizeableElement.style.top = `${ parseInt(resizeableElement.style.top, 10) + dy
       }px`;
+      updatePurpleDivPositionTop(event);
       
     };
 
@@ -168,11 +168,12 @@ const CreateDiv = () => {
       document.addEventListener("mouseup", onMouseUpBottomResize);
     };
     //left
-    const onMouseMoveLeftResize = (event,refContainer, refDragbox) => {
+    const onMouseMoveLeftResize = (event) => {
       const dx = event.clientX - xCord;
       xCord = event.clientX;
       width = width - dx;
       resizeableElement.style.width = `${width}px`;
+      console.log(resizeableElement.style.width)
       updatePurpleDivPositionLeft(event);
     };
 
@@ -209,10 +210,6 @@ const CreateDiv = () => {
      const parentRect = document.getElementById("container")?.getBoundingClientRect();
      const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
      const newWidth = parentRect.right - event.clientX;
-        console.log(parentRect.right)
-        console.log(event.clientX)
-        // console.log(newWidth)
-         console.log(dragboxRect.width)
         if (newWidth >= dragboxRect.width) {
              refContainer.current.style.width = newWidth + "px";
               refContainer.current.style.left = `${event.clientX}px`;
@@ -228,7 +225,7 @@ const CreateDiv = () => {
     const parentRect = document.getElementById("container")?.getBoundingClientRect();
     const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
     refContainer.current.style.width =
-    event.clientX - refContainer?.current?.getBoundingClientRect().left + "px";
+     event.clientX - refContainer?.current?.getBoundingClientRect().left + "px";
   if (parentRect.right <= dragboxRect.right) {
     const innerBoxLeft = parentRect.width - dragboxRect.width;
     refDragbox.current.style.left = innerBoxLeft + "px";
@@ -245,6 +242,17 @@ const updatePurpleDivPositionBottom= (event) =>{
       }
 
 }
+const updatePurpleDivPositionTop = (event) => {
+  const parentRect = document.getElementById("container")?.getBoundingClientRect();
+    const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
+    console.log(parentRect.bottom)
+    console.log(dragboxRect.bottom)
+    const newHeight = parentRect.bottom - event.clientY;
+  if (newHeight >= dragboxRect.bottom - parentRect.bottom) {
+    refContainer.current.style.height = newHeight + "px";
+    refContainer.current.style.top = `${event.clientY}px`;
+}
+};
 
   const handleMouseOver = () => {
     const parentRect = document
@@ -410,8 +418,8 @@ const updatePurpleDivPositionBottom= (event) =>{
             top: `${containerPosition.y}px`,
             left: `${containerPosition.x}px`,
             border: "1px solid #ccc",
-            minWidth: "120px",
-            minHeight: "120px",
+            minWidth: "100px",
+            minHeight: "100px",
           }}
          
         >
