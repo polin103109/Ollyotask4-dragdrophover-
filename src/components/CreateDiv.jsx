@@ -4,6 +4,8 @@ import "../styles/CreateDiv.css"
 import { AiOutlineDrag } from "react-icons/ai";
 
 const CreateDiv = () => {
+  const[container,setContainer] = useState({ width:500,height:500});
+  const [smallDiv,setSmalldiv] = useState({ width:100,height:100});
   const refContainer = useRef(null);
   const refDragbox = useRef(null);
   const refTop = useRef(null);
@@ -40,11 +42,11 @@ const CreateDiv = () => {
 
     //top
     const onMouseMoveTopResize = (event) => {
-      const dy = event.clientY - yCord;
-      height = height - dy;
-      yCord = event.clientY;
-      resizeableElement.style.height = `${height}px`;
-      resizeableElement.style.top = `${parseInt(resizeableElement.style.top, 10) + dy}px`;
+      // const dy = event.clientY - yCord;
+      // height = height - dy;
+      // yCord = event.clientY;
+      // resizeableElement.style.height = `${height}px`;
+      // resizeableElement.style.top = `${parseInt(resizeableElement.style.top, 10) + dy}px`;
       updatePurpleDivPositionTop(event);
     
         };
@@ -105,10 +107,10 @@ const CreateDiv = () => {
     };
     //left
     const onMouseMoveLeftResize = (event) => {
-      const dx = event.clientX - xCord;
-      xCord = event.clientX;
-      width = width - dx;
-      resizeableElement.style.width = `${width}px`;
+      // const dx = event.clientX - xCord;
+      // xCord = event.clientX;
+      // width = width - dx;
+      // resizeableElement.style.width = `${width}px`;
       updatePurpleDivPositionLeft(event);
     };
 
@@ -142,26 +144,26 @@ const CreateDiv = () => {
     };
   }, []);
   const updatePurpleDivPositionLeft = (event) => {
+    const parentRect = refContainer.current.getBoundingClientRect().right;
+    const dragboxRect = refDragbox.current.getBoundingClientRect();
+
     setPosition(prevItem => ({
       ...prevItem,
       x: Math.max(0, prevItem.x-event.movementX)
+     
     }))
-  //    const parentRect = document.getElementById("container")?.getBoundingClientRect();
-  //    const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
-  //    const newWidth = parentRect.right - event.clientX;
-  //   // console.log(parentRect.right)
-  //   // console.log(event.clientX)
-  // if (newWidth >= dragboxRect.width) {
-  //   refContainer.current.style.width = newWidth + "px";
-  //   refContainer.current.style.left = `${event.clientX}px`;
-
-  //   const innerBoxLeft = Math.min(
-  //     parentRect.width - dragboxRect.width,
-  //     parentRect.width - newWidth
-  //   );
-  //   console.log(innerBoxLeft)
-  //   refDragbox.current.style.left = innerBoxLeft + "px";
-  // }
+    if(container.width >= smallDiv.width) {
+      setContainerPosition(prevItem => ({
+        ...prevItem,
+        x: Math.min(parentRect-smallDiv.width, prevItem.x+event.movementX)
+       
+      }))
+    }
+    setContainer(prevItem => (
+      {...prevItem,
+      width:Math.max(smallDiv.width,prevItem.width-event.movementX)}
+    ))
+   
   };
  const updatePurpleDivPositionRight =(event)=>{
     const parentRect = document.getElementById("container")?.getBoundingClientRect();
@@ -174,6 +176,7 @@ const CreateDiv = () => {
   }
 }
 const updatePurpleDivPositionBottom= (event) =>{
+  
     const parentRect = document.getElementById("container")?.getBoundingClientRect();
     const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
     console.log(event.clientY)
@@ -187,39 +190,25 @@ const updatePurpleDivPositionBottom= (event) =>{
 
 }
  const updatePurpleDivPositionTop = (event) => {
+  const parentRect = refContainer.current.getBoundingClientRect().bottom;
+  
   setPosition(prevItem => ({
     ...prevItem,
     y: Math.max(0, prevItem.y-event.movementY)
   }))
+  if(container.height >=smallDiv.height) {
+    setContainerPosition(prevItem => ({
+      ...prevItem,
+      y: Math.min(parentRect-smallDiv.height, prevItem.y+event.movementY)
+     
+    }))
+  }
+  setContainer(prevItem => (
+    {...prevItem,
+    height:Math.max(smallDiv.height,prevItem.height-event.movementY)}
+  ))
 
-  //   const parentRect = document.getElementById("container")?.getBoundingClientRect();
-  //   const dragboxRect = document.getElementById("dragbox")?.getBoundingClientRect();
-  //  console.log(event.clientY)
-  // console.log(refContainer?.current?.getBoundingClientRect().bottom)
-  // refContainer.current.style.height =
-  // event.clientY - refContainer?.current?.getBoundingClientRect().bottom + "px";
-  // console.log(refContainer.current.style.height)
-  // if (parentRect.top >= dragboxRect.top) {
-  //   const innerBoxTop = parentRect.height - dragboxRect.height;
-  //   refDragbox.current.style.bottom = innerBoxTop + "px";
-  // }
-    // const newHeight = parentRect.bottom - event.clientY;
   
-    // if (newHeight >= dragboxRect.height) {
-    //   refContainer.current.style.height = newHeight + "px";
-    //   refContainer.current.style.top = `${event.clientY}px`;
-  
-    //   const innerBoxBottom = Math.min(
-    //     parentRect.height - dragboxRect.height,
-    //     parentRect.height - newHeight
-    //   );
-    //   refDragbox.current.style.top = innerBoxBottom + "px";
-    // }
-  
-    // if (dragboxRect.top <= parentRect.top ) {
-    //   const innerBoxBottom = parentRect.height - dragboxRect.height;
-    //   refDragbox.current.style.bottom = innerBoxBottom + "px";
-    // }
   };
 
   const handleMouseOver = () => {
@@ -286,13 +275,6 @@ const updatePurpleDivPositionBottom= (event) =>{
 
     const boundedX = Math.min(Math.max(newX, 0), maxX ? maxX : 0);
     const boundedY = Math.min(Math.max(newY, 0), maxY ? maxY : 0);
-    // if (e.clientX - startPosition.x <= newX)
-    //     setPosition({
-    //       x: e.clientX - startPosition.x < position.x
-    //           ? position.x - (e.clientX - startPosition.x)
-    //           : 0,
-    //       y: position.y,
-    //     });
 
    setPosition({ x: boundedX, y: boundedY });
     setAbsolutePosition({
@@ -308,7 +290,7 @@ const updatePurpleDivPositionBottom= (event) =>{
     document.removeEventListener("mouseup", handleMouseUp);
   };
 
-  const tooltipContent = "Heyy I am poppingg";
+  const tooltipContent = "Heyy!!";
 
   let startContainerPosition = { x: 610, y: 150 };
   const handleContainerMouseDown = (e) => {
@@ -346,6 +328,7 @@ const updatePurpleDivPositionBottom= (event) =>{
     document.removeEventListener("mousemove", handleContainerMouseMove);
     document.removeEventListener("mouseup", handleContainerMouseUp);
   };
+  
 
   return (
     <div className="maincontainer1" >
@@ -384,9 +367,8 @@ const updatePurpleDivPositionBottom= (event) =>{
           id="container"
           className="container"
           style={{
-            cursor:"move",
-            width: "500px",
-            height: "500px",
+            width: `${container.width}px`,
+            height: `${container.height}px`,
             position: "absolute",
             backgroundColor: "pink",
             gap:0,
@@ -402,26 +384,47 @@ const updatePurpleDivPositionBottom= (event) =>{
             ref={refLeft}
             className="resize-rl"
             style={{
-                background:"yellow"}}
+              
+                background:"black",
+                border:"5px"}}
+               
           ></div>
           <div
             ref={refTop}
             className="resize-rt"
             style={{
-                background:"yellow"}}
+                background:"black",
+                border:"5px"
+            }}
           ></div>
           <div
             ref={refRight}
             className="resize-rr"
             style={{
-                background:"yellow"}}
+                background:"black",
+                border:"5px"}}
           ></div>
-          <div
+           <div
             ref={refBottom}
             className="resize-rb"
             style={{
-                background:"yellow"}}
-          ></div>
+                background:"black",
+                border:"5px"
+                }}
+          ></div> 
+          {/* <div
+        id="resize-tl"
+        style={{
+          width: 5,
+          height: 5,
+          cursor: "nwse-resize",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          zIndex: 1200,
+        }}
+        onMouseDown={(e) => updateTopLeftResize(e, "top-left")}
+      ></div> */} 
           <div 
            style={{
             position:"relative",
@@ -446,13 +449,13 @@ const updatePurpleDivPositionBottom= (event) =>{
             id="dragbox"
             ref={refDragbox}
             style={{
-              width: "100px",
-              height: "100px",
+              width: `${smallDiv.width}px`,
+              height: `${smallDiv.height}px`,
               backgroundColor: "purple",
               position: "absolute",
-              top: `${position.y}px`,
-              left: `${position.x}px`,
-              cursor: "move",
+              top: position.y,
+              left: position.x,
+               cursor: "move",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
