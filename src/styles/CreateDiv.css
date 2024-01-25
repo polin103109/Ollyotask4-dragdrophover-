@@ -1,20 +1,20 @@
 .resize-rl{
-    cursor: col-resize;
-              height: 100%;
-              left: 0;
-              top: 0;
-              width: 1px;
-              position: absolute;
+  cursor: col-resize;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 1px;
+  position: absolute;
 
 }
 .resize-rt{
 
-              cursor: row-resize;
-              height: 1px;
-              left: 0;
-              top: 0;
-              width: 100%;
-              position: absolute;
+  cursor: row-resize;
+  height: 1px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  position: absolute;
 
 }
 .resize-rr{
@@ -40,6 +40,15 @@
    
 
   }
+  .resize-handle {
+    width: 10px; /* Set your desired width */
+    height: 10px; /* Set your desired height *//* Set your desired background color */
+    position: absolute; /* Position the element */
+    top: 0; /* Align to the top edge of the parent container */
+    left: 0; /* Align to the left edge of the parent container */
+    cursor: nwse-resize; /* Set the cursor style for the top-left corner */
+    /* Add any other styles you need */
+  }
   .directioncontainer{
     margin-bottom:70px;
     margin-top:60px;
@@ -49,6 +58,48 @@
     
 
   }
+  /* ResizableBox.css */
+
+.resizable-box {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-color: #3498db;
+  border: 1px solid #2980b9;
+  cursor: move;
+}
+
+.resizer {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #fff;
+  background-color: #3498db;
+  cursor: pointer;
+}
+
+.se {
+  bottom: 0;
+  right: 0;
+}
+
+.sw {
+  bottom: 0;
+  left: 0;
+}
+
+.ne {
+  top: 0;
+  right: 0;
+}
+
+.nw {
+  top: 0;
+  left: 0;
+}
+
+/* Add additional styles as needed */
+
   
 
 
