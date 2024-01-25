@@ -7,7 +7,7 @@ function App() {
   return (
     <>
     <CreateDiv/>
-    <ResizableBox/>
+    {/* <ResizableBox/> */}
         
     </>
   )
